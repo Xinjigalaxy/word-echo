@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">20dp</dimen>
+    <dimen name="screen_padding_small">16dp</dimen>
+    <dimen name="card_radius">28dp</dimen>
+    <dimen name="card_radius_large">32dp</dimen>
+    <dimen name="chip_radius">12dp</dimen>
+    <dimen name="play_button_size">78dp</dimen>
+    <dimen name="control_icon_size">26dp</dimen>
+    <dimen name="word_card_padding">24dp</dimen>
+    <dimen name="bottom_nav_height">72dp</dimen>
+</resources>

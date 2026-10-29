@@ -1,0 +1,66 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "com.zs.wordecho"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.zs.wordecho"
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName "1.0.0"
+        vectorDrawables.useSupportLibrary = true
+        resourceConfigurations += ["zh", "en"]
+    }
+
+    signingConfigs {
+        // Intentionally empty: local debug builds use the standard Android debug key.
+        // Release builds should be signed with a private key that is never committed.
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core:1.15.0"
+    implementation "androidx.appcompat:appcompat:1.7.1"
+    implementation "androidx.activity:activity:1.9.3"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+    implementation "com.google.android.material:material:1.13.0"
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Keep the build fully reproducible against the locally cached artifacts.
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3"
+        force "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
+        force "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.0"
+    }
+}
+

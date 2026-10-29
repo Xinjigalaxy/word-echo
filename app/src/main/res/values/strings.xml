@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">词间回声</string>
+    <string name="app_name_en" translatable="false">WORD ECHO</string>
+    <string name="tagline">让每个单词，都有回声</string>
+
+    <string name="nav_listen">听词</string>
+    <string name="nav_library">词库</string>
+    <string name="nav_saved">收藏</string>
+
+    <string name="settings">发音与设置</string>
+    <string name="open_settings">打开设置</string>
+    <string name="close">关闭</string>
+    <string name="done">完成</string>
+    <string name="cancel">取消</string>
+
+    <string name="daily_label">今日已听</string>
+    <string name="daily_goal">目标 %1$d</string>
+    <string name="daily_count">%1$d</string>
+    <string name="daily_hint_remaining">再听 %1$d 个词，完成今日目标</string>
+    <string name="daily_hint_done">今日目标已完成，继续保持节奏</string>
+    <string name="daily_progress">今日进度 %1$d%%</string>
+
+    <string name="level_all">全部</string>
+    <string name="level_four">四级</string>
+    <string name="level_six">六级</string>
+    <string name="level_both">四六级</string>
+    <string name="bank_counts">%1$s 个词条</string>
+    <string name="word_position">第 %1$d / %2$d 个</string>
+    <string name="level_badge">CET-%1$s</string>
+
+    <string name="meaning_label">释义</string>
+    <string name="meaning_hidden">释义已隐藏</string>
+    <string name="tap_to_reveal">轻点查看中文释义</string>
+    <string name="show_meaning">显示释义</string>
+    <string name="hide_meaning">隐藏释义</string>
+    <string name="translate_voice">朗读中文释义</string>
+    <string name="translate_voice_desc">英文之后，用中文语音读出释义</string>
+
+    <string name="play">开始朗读</string>
+    <string name="pause">暂停</string>
+    <string name="next_word">下一个词</string>
+    <string name="previous_word">上一个词</string>
+    <string name="replay">重读这个词</string>
+    <string name="favorite">收藏</string>
+    <string name="unfavorite">取消收藏</string>
+    <string name="speak_word">朗读</string>
+    <string name="starred">已收藏</string>
+
+    <string name="auto_play">自动连播</string>
+    <string name="auto_play_desc">读完自动切换下一个词</string>
+    <string name="interval">单词间隔</string>
+    <string name="interval_value">%1$.1f 秒</string>
+    <string name="voice_accent">发音</string>
+    <string name="accent_us">美音</string>
+    <string name="accent_uk">英音</string>
+    <string name="us_voice">美式发音</string>
+    <string name="uk_voice">英式发音</string>
+    <string name="voice_ready">系统语音已就绪 · %1$s</string>
+    <string name="voice_loading">正在连接系统语音…</string>
+    <string name="voice_not_ready">系统语音仍在准备，请稍后再试</string>
+    <string name="only_english">仅英文</string>
+    <string name="wordbank_error">词库载入失败，请重启应用</string>
+    <string name="voice_chinese_missing">当前语音引擎未安装中文语音包，将只朗读英文</string>
+    <string name="voice_init_failed">系统语音初始化失败</string>
+    <string name="voice_engine_missing">未找到可用的系统语音引擎</string>
+    <string name="voice_error">朗读失败：%1$s</string>
+    <string name="voice_settings">系统语音设置</string>
+    <string name="voice_settings_desc">安装或切换系统 TTS 引擎、中文语音包</string>
+
+    <string name="status_idle">轻点播放，开始今天的听词</string>
+    <string name="status_speaking">正在朗读 · %1$s</string>
+    <string name="status_paused">已暂停 · 随时继续</string>
+    <string name="status_next">即将播放下一个词…</string>
+    <string name="status_loading">正在载入词库…</string>
+    <string name="status_choose_level">已切换到%1$s词汇</string>
+    <string name="status_finished">已读完 · 轻点播放继续</string>
+    <string name="preview_word">词库预览</string>
+    <string name="voice_tag">%1$s · %2$.2f×</string>
+    <string name="cycle_restart">已听完一轮，重新打乱词库</string>
+    <string name="state_speaking">正在朗读</string>
+    <string name="state_preparing">准备中</string>
+    <string name="state_standby">待机</string>
+    <string name="state_paused">已暂停</string>
+
+    <string name="browse_title">词库</string>
+    <string name="browse_subtitle">翻阅 6,661 个四级与六级词条</string>
+    <string name="search_hint">搜索单词或中文释义</string>
+    <string name="search_clear">清除搜索</string>
+    <string name="filter_all">全部</string>
+    <string name="filter_four">CET-4</string>
+    <string name="filter_six">CET-6</string>
+    <string name="result_count">%1$s 个结果</string>
+    <string name="no_results_title">没有找到这个词</string>
+    <string name="no_results_body">换一个拼写，或试试中文关键词</string>
+    <string name="browse_empty">词库加载中…</string>
+
+    <string name="saved_title">收藏</string>
+    <string name="saved_subtitle">把想再听一遍的词，留在这里</string>
+    <string name="saved_count">%1$d 个收藏</string>
+    <string name="saved_empty_title">还没有收藏的词</string>
+    <string name="saved_empty_body">在听词页点亮星标，或在词库里收藏一个喜欢的单词。</string>
+    <string name="browse_words">去词库逛逛</string>
+    <string name="review_saved">随机听收藏</string>
+    <string name="no_favorites_toast">先收藏几个词吧</string>
+    <string name="remove_favorite">已取消收藏</string>
+    <string name="add_favorite">已加入收藏</string>
+
+    <string name="detail_title">单词详情</string>
+    <string name="detail_set_current">听这个词</string>
+    <string name="detail_favorite">收藏</string>
+    <string name="detail_unfavorite">取消收藏</string>
+    <string name="detail_more">完整释义</string>
+
+    <string name="settings_title">发音与设置</string>
+    <string name="settings_voice_section">朗读声音</string>
+    <string name="settings_playback_section">播放偏好</string>
+    <string name="settings_theme_section">外观</string>
+    <string name="settings_about_section">关于</string>
+    <string name="speech_rate">语速</string>
+    <string name="speech_rate_value">%1$.2f×</string>
+    <string name="repeat_count">每个词朗读次数</string>
+    <string name="repeat_once">1 次</string>
+    <string name="repeat_twice">2 次</string>
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="about_body">用系统 TTS 随机朗读四级、六级词汇。所有词库与收藏都保存在本机，离线也能听。</string>
+    <string name="about_version">版本 %1$s</string>
+    <string name="source_note">词汇词表整理自 KyleBing/english-vocabulary（BSD-3-Clause），已去重、合并并补全级别标记。</string>
+    <string name="tts_unavailable_hint">如果听不到声音，请检查系统 TTS 引擎与中文语音包。</string>
+    <string name="settings_saved">设置已更新</string>
+    <string name="accent_changed">已切换为%1$s</string>
+
+    <string name="cd_logo">词间回声标志</string>
+    <string name="cd_waveform">朗读声波</string>
+    <string name="cd_level_switch">选择词汇级别</string>
+    <string name="cd_word_card">单词卡片</string>
+    <string name="cd_settings">打开发音与设置</string>
+    <string name="cd_star">收藏状态</string>
+    <string name="cd_search">搜索</string>
+    <string name="cd_play_pause">播放或暂停</string>
+    <string name="cd_empty_star">收藏空状态插图</string>
+
+    <string name="random_mode">随机抽词</string>
+    <string name="random_mode_desc">每轮打乱顺序，不重复</string>
+    <string name="current_deck">%1$s · %2$d 个词</string>
+    <string name="settings_tts_status">语音引擎状态</string>
+    <string name="tap_to_retry">轻点重试</string>
+    <string name="loading_wordbank">正在载入词库</string>
+    <string name="loading_wordbank_desc">第一次打开只需片刻</string>
+</resources>

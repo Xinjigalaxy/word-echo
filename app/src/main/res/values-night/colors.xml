@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#A9D8C1</color>
+    <color name="on_primary">#0D2E22</color>
+    <color name="primary_container">#234C3B</color>
+    <color name="on_primary_container">#C7EEDA</color>
+
+    <color name="secondary">#E9C092</color>
+    <color name="on_secondary">#462A11</color>
+    <color name="secondary_container">#5E3F23</color>
+    <color name="on_secondary_container">#F8DEC4</color>
+
+    <color name="tertiary">#CDC2F2</color>
+    <color name="on_tertiary">#352A58</color>
+    <color name="tertiary_container">#4C3F72</color>
+    <color name="on_tertiary_container">#E9E0FF</color>
+
+    <color name="background">#101713</color>
+    <color name="on_background">#E7EDE7</color>
+    <color name="surface">#141C17</color>
+    <color name="on_surface">#E7EDE7</color>
+    <color name="surface_variant">#3E4A42</color>
+    <color name="on_surface_variant">#C0C9C1</color>
+    <color name="outline">#8A958C</color>
+    <color name="outline_variant">#3F4B43</color>
+
+    <color name="error">#FFB4AB</color>
+    <color name="on_error">#690005</color>
+    <color name="error_container">#93000A</color>
+    <color name="on_error_container">#FFDAD6</color>
+
+    <color name="surface_container_lowest">#0B110E</color>
+    <color name="surface_container_low">#18221C</color>
+    <color name="surface_container">#1C2821</color>
+    <color name="surface_container_high">#223027</color>
+    <color name="surface_container_highest">#29382F</color>
+
+    <color name="inverse_surface">#E7EDE7</color>
+    <color name="inverse_on_surface">#2C322D</color>
+    <color name="inverse_primary">#2E5B49</color>
+    <color name="scrim">#000000</color>
+
+    <color name="accent_amber">#E8B77A</color>
+    <color name="accent_amber_soft">#5A4226</color>
+    <color name="accent_rose">#E5AEBB</color>
+    <color name="accent_sage">#A5C9AD</color>
+    <color name="paper_line">#344139</color>
+    <color name="logo_start">#3D715C</color>
+    <color name="logo_end">#183528</color>
+    <color name="launcher_background">#183528</color>
+    <color name="launcher_foreground">#FFF9EF</color>
+
+    <color name="level_four_bg">#234C3B</color>
+    <color name="level_four_fg">#C7EEDA</color>
+    <color name="level_six_bg">#5E3F23</color>
+    <color name="level_six_fg">#F8DEC4</color>
+    <color name="level_both_bg">#4C3F72</color>
+    <color name="level_both_fg">#E9E0FF</color>
+</resources>
