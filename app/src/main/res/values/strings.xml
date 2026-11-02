@@ -57,6 +57,9 @@
     <string name="us_voice">美式发音</string>
     <string name="uk_voice">英式发音</string>
     <string name="voice_ready">系统语音已就绪 · %1$s</string>
+    <string name="voice_ready_engine">系统语音已就绪 · %1$s · %2$s</string>
+    <string name="engine_switched">语音引擎已切换为 %1$s</string>
+    <string name="system_default_engine">系统默认引擎</string>
     <string name="voice_loading">正在连接系统语音…</string>
     <string name="voice_not_ready">系统语音仍在准备，请稍后再试</string>
     <string name="only_english">仅英文</string>

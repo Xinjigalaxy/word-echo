@@ -114,7 +114,10 @@ public final class SettingsSheet {
             }
         });
 
-        systemTts.setOnClickListener(v -> listener.onOpenSystemTts());
+        systemTts.setOnClickListener(v -> {
+            dialog.dismiss();
+            listener.onOpenSystemTts();
+        });
         view.findViewById(R.id.btn_done).setOnClickListener(v -> dialog.dismiss());
         view.findViewById(R.id.settings_close).setOnClickListener(v -> dialog.dismiss());
         dialog.show();

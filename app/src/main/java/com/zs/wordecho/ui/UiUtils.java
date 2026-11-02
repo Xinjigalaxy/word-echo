@@ -1,6 +1,8 @@
 package com.zs.wordecho.ui;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.TextView;
@@ -48,6 +50,20 @@ public final class UiUtils {
 
     public static String accentLabel(Context context, int accent) {
         return context.getString(accent == AppPrefs.ACCENT_UK ? R.string.accent_uk : R.string.accent_us);
+    }
+
+    public static String ttsEngineLabel(Context context, String packageName) {
+        if (packageName == null || packageName.isEmpty()) {
+            return context.getString(R.string.system_default_engine);
+        }
+        try {
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+            CharSequence label = pm.getApplicationLabel(info);
+            return label == null ? packageName : label.toString();
+        } catch (PackageManager.NameNotFoundException ignored) {
+            return packageName;
+        }
     }
 
     public static void applyLevelTag(TextView view, int mask) {

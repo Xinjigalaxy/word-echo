@@ -30,6 +30,7 @@ public final class SpeechController {
 
     private final Context context;
     private final Listener listener;
+    private final String enginePackage;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private TextToSpeech tts;
@@ -47,14 +48,24 @@ public final class SpeechController {
     private float rate = 0.95f;
     private Runnable pendingRepeat;
 
-    public SpeechController(Context context, Listener listener) {
+    public SpeechController(Context context, String enginePackage, Listener listener) {
         this.context = context.getApplicationContext();
         this.listener = listener;
+        this.enginePackage = enginePackage;
         createEngine();
     }
 
     private void createEngine() {
-        tts = new TextToSpeech(context, status -> mainHandler.post(() -> onInitialized(status)));
+        if (enginePackage != null && !enginePackage.isEmpty()) {
+            tts = new TextToSpeech(context, status -> mainHandler.post(() -> onInitialized(status)),
+                    enginePackage);
+        } else {
+            tts = new TextToSpeech(context, status -> mainHandler.post(() -> onInitialized(status)));
+        }
+    }
+
+    public String getEnginePackage() {
+        return enginePackage;
     }
 
     private void onInitialized(int status) {

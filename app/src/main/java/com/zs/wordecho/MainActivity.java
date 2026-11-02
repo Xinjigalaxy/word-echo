@@ -78,6 +78,7 @@ public final class MainActivity extends AppCompatActivity {
     private String pendingRestoreKey;
     private String ttsStatusText;
     private int ttsStatusColorRes;
+    private String activeEnginePackage = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -352,7 +353,9 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpeech() {
-        speech = new SpeechController(this, new SpeechController.Listener() {
+        activeEnginePackage = resolveTtsEngine();
+        speech = new SpeechController(this, activeEnginePackage,
+                new SpeechController.Listener() {
             @Override
             public void onReady(boolean chineseAvailable) {
                 if (isFinishing() || isDestroyed()) {
@@ -730,14 +733,21 @@ public final class MainActivity extends AppCompatActivity {
             return;
         }
         String accent = UiUtils.accentLabel(this, prefs.getAccent());
+        String engine = UiUtils.ttsEngineLabel(this, speech.getEnginePackage());
         if (speech.isChineseAvailable() || !prefs.isTranslateVoice()) {
-            ttsStatusText = getString(R.string.voice_ready, accent);
+            ttsStatusText = getString(R.string.voice_ready_engine, engine, accent);
             ttsStatusColorRes = R.color.primary;
         } else {
             ttsStatusText = getString(R.string.voice_chinese_missing);
             ttsStatusColorRes = R.color.accent_amber;
         }
         listenPage.setTtsStatus(ttsStatusText, ttsStatusColorRes);
+    }
+
+    private String resolveTtsEngine() {
+        String engine = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.TTS_DEFAULT_SYNTH);
+        return engine == null ? "" : engine;
     }
 
     private void updateVoiceTag() {
@@ -913,6 +923,22 @@ public final class MainActivity extends AppCompatActivity {
 
     private void clearKeepScreenOn() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (speech == null) {
+            return;
+        }
+        String currentEngine = resolveTtsEngine();
+        if (!currentEngine.equals(activeEnginePackage)) {
+            stopTransport(false);
+            speech.shutdown();
+            setupSpeech();
+            showMessage(getString(R.string.engine_switched,
+                    UiUtils.ttsEngineLabel(this, currentEngine)), false);
+        }
     }
 
     @Override
