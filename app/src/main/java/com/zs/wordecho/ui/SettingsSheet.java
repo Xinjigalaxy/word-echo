@@ -52,8 +52,13 @@ public final class SettingsSheet {
         int theme = prefs.getThemeMode();
         themeGroup.check(theme == AppPrefs.THEME_DARK ? R.id.chip_dark
                 : theme == AppPrefs.THEME_LIGHT ? R.id.chip_light : R.id.chip_system);
-        rateSlider.setValue(prefs.getSpeechRate());
-        rateValue.setText(activity.getString(R.string.speech_rate_value, prefs.getSpeechRate()));
+        // Keep the rate slider continuous and clamp values written by older builds.
+        // A stale value that does not align to a discrete step would otherwise throw
+        // "Value must be equal to valueFrom plus a multiple of stepSize".
+        rateSlider.setStepSize(0f);
+        float initialRate = Math.max(0.6f, Math.min(1.4f, prefs.getSpeechRate()));
+        rateSlider.setValue(initialRate);
+        rateValue.setText(activity.getString(R.string.speech_rate_value, initialRate));
         translate.setChecked(prefs.isTranslateVoice());
         ttsStatusView.setText(ttsStatus);
         ttsStatusView.setTextColor(UiUtils.color(activity, statusColorRes));

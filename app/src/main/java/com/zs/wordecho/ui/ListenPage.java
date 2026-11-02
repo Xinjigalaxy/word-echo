@@ -324,6 +324,7 @@ public final class ListenPage extends FrameLayout {
 
     public void setInterval(float seconds) {
         suppressCallbacks = true;
+        intervalSlider.setStepSize(0f);
         intervalSlider.setValue(Math.max(1f, Math.min(10f, seconds)));
         intervalValue.setText(getContext().getString(R.string.interval_value, seconds));
         suppressCallbacks = false;
