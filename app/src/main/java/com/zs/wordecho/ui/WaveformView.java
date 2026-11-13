@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
+import com.google.android.material.color.MaterialColors;
 import com.zs.wordecho.R;
 
 /** Lightweight animated voice waveform. Animates only while speech is active. */
@@ -33,7 +33,8 @@ public final class WaveformView extends View {
         super(context, attrs);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        baseColor = ContextCompat.getColor(context, R.color.primary);
+        baseColor = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary,
+                UiUtils.color(context, R.color.primary));
         for (int i = 0; i < BAR_COUNT; i++) {
             float normalized = (float) i / (BAR_COUNT - 1);
             float envelope = (float) Math.sin(normalized * Math.PI);

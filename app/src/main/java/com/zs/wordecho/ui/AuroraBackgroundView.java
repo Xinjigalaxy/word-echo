@@ -11,8 +11,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
+import com.google.android.material.color.MaterialColors;
 import com.zs.wordecho.R;
 
 /**
@@ -24,8 +24,8 @@ public final class AuroraBackgroundView extends View {
     private final Paint glowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Shader baseShader;
-    private Shader greenGlow;
-    private Shader amberGlow;
+    private Shader primaryGlow;
+    private Shader tertiaryGlow;
 
     public AuroraBackgroundView(Context context) {
         this(context, null);
@@ -35,11 +35,18 @@ public final class AuroraBackgroundView extends View {
         super(context, attrs);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(UiUtils.dp(context, 0.65f));
-        linePaint.setColor(withAlpha(UiUtils.color(context, R.color.paper_line), 42));
+        int line = themeColor(com.google.android.material.R.attr.colorOutlineVariant,
+                R.color.paper_line);
+        linePaint.setColor(withAlpha(line, 42));
     }
 
     private static int withAlpha(int color, int alpha) {
         return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    private int themeColor(int attr, int fallbackRes) {
+        return MaterialColors.getColor(getContext(), attr,
+                UiUtils.color(getContext(), fallbackRes));
     }
 
     @Override
@@ -48,22 +55,25 @@ public final class AuroraBackgroundView extends View {
         if (w <= 0 || h <= 0) {
             return;
         }
-        int background = UiUtils.color(getContext(), R.color.background);
-        int surfaceLow = UiUtils.color(getContext(), R.color.surface_container_low);
+        int background = themeColor(
+                com.google.android.material.R.attr.colorSurfaceContainerLow, R.color.background);
+        int surface = themeColor(
+                com.google.android.material.R.attr.colorSurface, R.color.surface);
         baseShader = new LinearGradient(0, 0, 0, h,
-                new int[]{background, surfaceLow, background},
+                new int[]{surface, background, surface},
                 new float[]{0f, 0.62f, 1f}, Shader.TileMode.CLAMP);
         basePaint.setShader(baseShader);
 
-        int primary = UiUtils.color(getContext(), R.color.primary);
-        greenGlow = new RadialGradient(
+        int primary = themeColor(androidx.appcompat.R.attr.colorPrimary, R.color.primary);
+        primaryGlow = new RadialGradient(
                 w * 0.12f, -h * 0.02f, w * 0.82f,
-                new int[]{withAlpha(primary, 30), withAlpha(primary, 0)},
+                new int[]{withAlpha(primary, 34), withAlpha(primary, 0)},
                 new float[]{0f, 1f}, Shader.TileMode.CLAMP);
-        int amber = UiUtils.color(getContext(), R.color.accent_amber);
-        amberGlow = new RadialGradient(
+        int tertiary = themeColor(
+                com.google.android.material.R.attr.colorTertiary, R.color.accent_amber);
+        tertiaryGlow = new RadialGradient(
                 w * 1.06f, h * 0.53f, w * 0.72f,
-                new int[]{withAlpha(amber, 25), withAlpha(amber, 0)},
+                new int[]{withAlpha(tertiary, 30), withAlpha(tertiary, 0)},
                 new float[]{0f, 1f}, Shader.TileMode.CLAMP);
     }
 
@@ -73,14 +83,15 @@ public final class AuroraBackgroundView extends View {
         int w = getWidth();
         int h = getHeight();
         if (baseShader == null) {
-            canvas.drawColor(UiUtils.color(getContext(), R.color.background));
+            canvas.drawColor(themeColor(
+                    com.google.android.material.R.attr.colorSurfaceContainerLow, R.color.background));
             return;
         }
         canvas.drawRect(0, 0, w, h, basePaint);
 
-        glowPaint.setShader(greenGlow);
+        glowPaint.setShader(primaryGlow);
         canvas.drawRect(0, 0, w, h, glowPaint);
-        glowPaint.setShader(amberGlow);
+        glowPaint.setShader(tertiaryGlow);
         canvas.drawRect(0, 0, w, h, glowPaint);
 
         int step = UiUtils.dp(getContext(), 52);

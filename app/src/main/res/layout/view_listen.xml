@@ -36,7 +36,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.08"
                     android:text="@string/daily_label"
-                    android:textColor="@color/on_surface_variant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="11sp" />
 
                 <LinearLayout
@@ -52,7 +52,7 @@
                         android:fontFamily="sans-serif"
                         android:includeFontPadding="false"
                         android:text="@string/daily_count"
-                        android:textColor="@color/primary"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="27sp"
                         android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/on_surface_variant"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -76,7 +76,7 @@
                 android:gravity="end"
                 android:lineSpacingExtra="2dp"
                 android:maxLines="2"
-                android:textColor="@color/on_surface_variant"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -85,8 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:indicatorColor="@color/primary"
-            app:trackColor="@color/surface_container_highest"
+            app:indicatorColor="?attr/colorPrimary"
+            app:trackColor="?attr/colorSurfaceContainerHighest"
             app:trackCornerRadius="4dp"
             app:trackStopIndicatorSize="0dp"
             app:trackThickness="6dp" />
@@ -133,10 +133,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:clickable="false"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="32dp"
             app:cardElevation="0dp"
-            app:strokeColor="@color/outline_variant"
+            app:strokeColor="?attr/colorOutlineVariant"
             app:strokeWidth="1dp">
 
             <FrameLayout
@@ -153,7 +153,7 @@
                     android:fontFamily="serif"
                     android:includeFontPadding="false"
                     android:text="Aa"
-                    android:textColor="@color/primary"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="104sp"
                     android:textStyle="bold" />
 
@@ -192,7 +192,7 @@
                             android:layout_marginStart="9dp"
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.02"
-                            android:textColor="@color/on_surface_variant"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10.5sp" />
 
                         <Space
@@ -226,7 +226,7 @@
                         android:includeFontPadding="false"
                         android:letterSpacing="-0.035"
                         android:maxLines="2"
-                        android:textColor="@color/on_surface"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="56sp"
                         android:textStyle="bold" />
 
@@ -247,7 +247,7 @@
                             android:paddingTop="3dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="3dp"
-                            android:textColor="@color/on_surface_variant"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp"
                             android:visibility="gone" />
 
@@ -258,7 +258,7 @@
                             android:layout_marginStart="2dp"
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.03"
-                            android:textColor="@color/accent_amber"
+                            android:textColor="?attr/colorTertiary"
                             android:textSize="10.5sp" />
                     </LinearLayout>
 
@@ -282,7 +282,7 @@
                             android:fontFamily="sans-serif"
                             android:lineSpacingMultiplier="1.35"
                             android:maxLines="4"
-                            android:textColor="@color/on_surface"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="17sp" />
 
                         <TextView
@@ -294,7 +294,7 @@
                             android:fontFamily="sans-serif-medium"
                             android:gravity="center_vertical"
                             android:text="@string/tap_to_reveal"
-                            android:textColor="@color/on_surface_variant"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="14sp"
                             android:visibility="gone" />
                     </LinearLayout>
@@ -320,7 +320,7 @@
                             android:layout_marginStart="10dp"
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.03"
-                            android:textColor="@color/on_surface_variant"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10.5sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -336,7 +336,7 @@
             android:maxLines="2"
             android:minHeight="18dp"
             android:text="@string/status_idle"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12.5sp" />
 
         <!-- Transport controls -->
@@ -355,7 +355,7 @@
                 android:contentDescription="@string/replay"
                 android:padding="12dp"
                 android:src="@drawable/ic_replay"
-                app:tint="@color/on_surface_variant" />
+                app:tint="?attr/colorOnSurfaceVariant" />
 
             <ImageButton
                 android:id="@+id/btn_previous"
@@ -366,7 +366,7 @@
                 android:contentDescription="@string/previous_word"
                 android:padding="12dp"
                 android:src="@drawable/ic_previous"
-                app:tint="@color/on_surface" />
+                app:tint="?attr/colorOnSurface" />
 
             <FrameLayout
                 android:layout_width="94dp"
@@ -415,7 +415,7 @@
                 android:contentDescription="@string/next_word"
                 android:padding="12dp"
                 android:src="@drawable/ic_next"
-                app:tint="@color/on_surface" />
+                app:tint="?attr/colorOnSurface" />
 
             <ImageButton
                 android:id="@+id/btn_reveal"
@@ -425,7 +425,7 @@
                 android:contentDescription="@string/hide_meaning"
                 android:padding="12dp"
                 android:src="@drawable/ic_eye"
-                app:tint="@color/on_surface_variant" />
+                app:tint="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 
         <!-- Auto play settings -->
@@ -433,10 +433,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@color/surface_container_low"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp"
-            app:strokeColor="@color/outline_variant"
+            app:strokeColor="?attr/colorOutlineVariant"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -466,7 +466,7 @@
                             android:layout_gravity="center"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_headphones"
-                            app:tint="@color/on_primary_container" />
+                            app:tint="?attr/colorOnPrimaryContainer" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -481,7 +481,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
                             android:text="@string/auto_play"
-                            android:textColor="@color/on_surface"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp" />
 
                         <TextView
@@ -489,7 +489,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
                             android:text="@string/auto_play_desc"
-                            android:textColor="@color/on_surface_variant"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="11.5sp" />
                     </LinearLayout>
 
@@ -512,7 +512,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/interval"
-                        android:textColor="@color/on_surface_variant"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp" />
 
                     <com.google.android.material.slider.Slider
@@ -535,7 +535,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="end"
-                        android:textColor="@color/on_surface"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -561,7 +561,7 @@
                 android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:text="@string/voice_loading"
-                android:textColor="@color/on_surface_variant"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="11sp" />
 
             <TextView
@@ -572,7 +572,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:padding="4dp"
                 android:text="@string/voice_settings"
-                android:textColor="@color/primary"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -585,7 +585,7 @@
             android:gravity="center"
             android:letterSpacing="0.06"
             android:text="念念不忘，必有回响。"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

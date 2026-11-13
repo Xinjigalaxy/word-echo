@@ -38,7 +38,7 @@
             android:fontFamily="sans-serif"
             android:letterSpacing="0.02"
             android:text="@string/app_name"
-            android:textColor="@color/on_surface"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.18"
             android:text="@string/app_name_en"
-            android:textColor="@color/accent_amber"
+            android:textColor="?attr/colorTertiary"
             android:textSize="8.5sp" />
     </LinearLayout>
 
@@ -61,5 +61,5 @@
         android:contentDescription="@string/cd_settings"
         android:padding="12dp"
         android:src="@drawable/ic_settings"
-        app:tint="@color/on_surface_variant" />
+        app:tint="?attr/colorOnSurfaceVariant" />
 </LinearLayout>
