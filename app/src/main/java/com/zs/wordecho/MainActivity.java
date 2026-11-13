@@ -1,9 +1,15 @@
 package com.zs.wordecho;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,17 +23,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.zs.wordecho.data.AppPrefs;
 import com.zs.wordecho.data.FavoriteStore;
 import com.zs.wordecho.data.Word;
 import com.zs.wordecho.data.WordRepository;
+import com.zs.wordecho.playback.PlaybackKeepAliveService;
 import com.zs.wordecho.speech.SpeechController;
 import com.zs.wordecho.ui.BrowsePage;
 import com.zs.wordecho.ui.ListenPage;
@@ -45,6 +55,7 @@ import java.util.Random;
 public final class MainActivity extends AppCompatActivity {
     private static final String STATE_WORD_KEY = "current_word_key";
     private static final String STATE_FAVORITES_MODE = "favorites_mode";
+    private static final int REQUEST_NOTIFICATIONS = 4102;
 
     private AppPrefs prefs;
     private FavoriteStore favorites;
@@ -79,11 +90,23 @@ public final class MainActivity extends AppCompatActivity {
     private String ttsStatusText;
     private int ttsStatusColorRes;
     private String activeEnginePackage = "";
+    private boolean keepAliveRunning;
+    private int systemBarBottomInset;
+
+    private final BroadcastReceiver stopPlaybackReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            pausePlayback();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = new AppPrefs(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && prefs.isDynamicColor()) {
+            DynamicColors.applyToActivityIfAvailable(this);
+        }
         favorites = new FavoriteStore(this);
         repository = WordRepository.getInstance(this);
         if (savedInstanceState != null) {
@@ -117,6 +140,9 @@ public final class MainActivity extends AppCompatActivity {
 
         setupSpeech();
         loadWordBank();
+        ContextCompat.registerReceiver(this, stopPlaybackReceiver,
+                new IntentFilter(PlaybackKeepAliveService.ACTION_STOP_PLAYBACK),
+                ContextCompat.RECEIVER_NOT_EXPORTED);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -333,13 +359,32 @@ public final class MainActivity extends AppCompatActivity {
         View root = findViewById(R.id.root);
         View appColumn = findViewById(R.id.app_column);
         View nav = findViewById(R.id.nav_surface);
+        View bottomNav = findViewById(R.id.bottom_nav);
+        // NavigationBarView adds its own bottom inset padding. Consume insets at the
+        // container and keep the bar itself at zero bottom padding; the window-level
+        // safe-area calculation below is the single source of truth.
+        ViewCompat.setOnApplyWindowInsetsListener(nav,
+                (v, insets) -> WindowInsetsCompat.CONSUMED);
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNav,
+                (v, insets) -> WindowInsetsCompat.CONSUMED);
+        bottomNav.addOnLayoutChangeListener((v, left, top, right, bottom,
+                                             oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (v.getPaddingBottom() != 0) {
+                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 0);
+                v.requestLayout();
+            }
+        });
+        root.addOnLayoutChangeListener((v, left, top, right, bottom,
+                                        oldLeft, oldTop, oldRight, oldBottom) ->
+                updateNavSurfacePadding(root, nav));
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
             androidx.core.graphics.Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             androidx.core.graphics.Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+            systemBarBottomInset = bars.bottom;
             appColumn.setPadding(0, bars.top, 0, keyboardVisible ? ime.bottom : 0);
             nav.setVisibility(keyboardVisible ? View.GONE : View.VISIBLE);
-            nav.setPadding(0, 0, 0, bars.bottom);
+            updateNavSurfacePadding(root, nav);
             return insets;
         });
 
@@ -350,6 +395,21 @@ public final class MainActivity extends AppCompatActivity {
         controller.setAppearanceLightStatusBars(!night);
         controller.setAppearanceLightNavigationBars(!night);
         root.requestApplyInsets();
+    }
+
+    private void updateNavSurfacePadding(View root, View nav) {
+        if (root == null || nav == null || root.getHeight() == 0) {
+            return;
+        }
+        int[] location = new int[2];
+        root.getLocationOnScreen(location);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        boolean windowCoversNavigationBar = location[1] + root.getHeight()
+                >= screenHeight - UiUtils.dp(this, 4);
+        int bottom = windowCoversNavigationBar ? systemBarBottomInset : 0;
+        if (nav.getPaddingBottom() != bottom) {
+            nav.setPadding(0, 0, 0, bottom);
+        }
     }
 
     private void setupSpeech() {
@@ -561,12 +621,19 @@ public final class MainActivity extends AppCompatActivity {
         cancelPendingNext();
         speech.setEnglishAccent(prefs.getAccent() == AppPrefs.ACCENT_UK);
         speech.setSpeechRate(prefs.getSpeechRate());
-        speech.speakWord(currentWord, prefs.getRepeatCount(), prefs.isTranslateVoice());
+        updateVoiceTag();
+        speech.speakWord(currentWord, prefs.getRepeatCount(), prefs.isTranslateVoice(),
+                prefs.isSpellWord());
         listenPage.setPlaying(true, true);
         listenPage.setPlaybackStatus(getString(R.string.status_speaking, currentWord.getText()));
         int count = prefs.recordPlayed(currentWord);
         listenPage.setDaily(count, prefs.getDailyGoal());
-        addKeepScreenOn();
+        if (prefs.isScreenOffPlayback()) {
+            clearKeepScreenOn();
+        } else {
+            addKeepScreenOn();
+        }
+        startKeepAliveIfEnabled();
     }
 
     private void pausePlayback() {
@@ -588,7 +655,23 @@ public final class MainActivity extends AppCompatActivity {
                 listenPage.setPlaybackStatus(getString(R.string.state_paused));
             }
         }
+        stopKeepAlive();
         clearKeepScreenOn();
+    }
+
+    private void startKeepAliveIfEnabled() {
+        if (prefs.isScreenOffPlayback() && playing && currentWord != null
+                && !keepAliveRunning) {
+            PlaybackKeepAliveService.start(this, currentWord.getText());
+            keepAliveRunning = true;
+        }
+    }
+
+    private void stopKeepAlive() {
+        if (keepAliveRunning) {
+            PlaybackKeepAliveService.stop(this);
+            keepAliveRunning = false;
+        }
     }
 
     private void replayCurrent() {
@@ -756,6 +839,9 @@ public final class MainActivity extends AppCompatActivity {
         }
         String tag = getString(R.string.voice_tag,
                 UiUtils.accentLabel(this, prefs.getAccent()), prefs.getSpeechRate());
+        if (prefs.isSpellWord()) {
+            tag = tag + " · " + getString(R.string.spell_tag);
+        }
         if (prefs.isTranslateVoice() && !speech.isChineseAvailable()) {
             tag = tag + " · " + getString(R.string.only_english);
         }
@@ -884,6 +970,34 @@ public final class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
+                    public void onScreenOffChanged(boolean enabled) {
+                        if (enabled) {
+                            requestNotificationPermissionIfNeeded();
+                            clearKeepScreenOn();
+                            if (playing) {
+                                startKeepAliveIfEnabled();
+                            }
+                        } else {
+                            stopKeepAlive();
+                            if (playing) {
+                                addKeepScreenOn();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onDailyGoalChanged(int goal) {
+                        updateDaily();
+                    }
+
+                    @Override
+                    public void onDynamicColorChanged(boolean enabled) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            recreate();
+                        }
+                    }
+
+                    @Override
                     public void onThemeChanged(int themeMode) {
                         AppCompatDelegate.setDefaultNightMode(WordEchoApp.toDelegateMode(themeMode));
                     }
@@ -917,6 +1031,15 @@ public final class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    private void requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATIONS);
+        }
+    }
+
     private void addKeepScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
@@ -928,6 +1051,11 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (prefs.isScreenOffPlayback() && playing) {
+            startKeepAliveIfEnabled();
+        } else if (!prefs.isScreenOffPlayback() && keepAliveRunning) {
+            stopKeepAlive();
+        }
         if (speech == null) {
             return;
         }
@@ -944,7 +1072,8 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (playing || (speech != null && speech.isSpeaking())) {
+        if (!prefs.isScreenOffPlayback()
+                && (playing || (speech != null && speech.isSpeaking()))) {
             stopTransport(true);
         }
     }
@@ -961,6 +1090,12 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            unregisterReceiver(stopPlaybackReceiver);
+        } catch (IllegalArgumentException ignored) {
+            // Receiver was already unregistered.
+        }
+        stopKeepAlive();
         handler.removeCallbacksAndMessages(null);
         if (speech != null) {
             speech.shutdown();

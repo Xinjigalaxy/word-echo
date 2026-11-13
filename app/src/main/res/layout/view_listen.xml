@@ -379,7 +379,8 @@
                     android:layout_height="90dp"
                     android:layout_gravity="center"
                     android:alpha="0.28"
-                    android:background="@drawable/bg_play_ring" />
+                    android:background="@drawable/bg_play_ring"
+                    android:backgroundTint="?attr/colorPrimaryContainer" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btn_play"
@@ -389,10 +390,10 @@
                     android:clickable="true"
                     android:contentDescription="@string/cd_play_pause"
                     android:focusable="true"
-                    app:cardBackgroundColor="@color/primary"
+                    app:cardBackgroundColor="?attr/colorPrimary"
                     app:cardCornerRadius="39dp"
                     app:cardElevation="8dp"
-                    app:rippleColor="@color/on_primary">
+                    app:rippleColor="?attr/colorOnPrimary">
 
                     <ImageView
                         android:id="@+id/play_icon"
@@ -401,7 +402,7 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_play"
-                        app:tint="@color/on_primary" />
+                        app:tint="?attr/colorOnPrimary" />
                 </com.google.android.material.card.MaterialCardView>
             </FrameLayout>
 

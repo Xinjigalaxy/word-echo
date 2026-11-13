@@ -117,8 +117,8 @@
                 android:layout_height="wrap_content"
                 android:minHeight="42dp"
                 android:text="@string/play"
-                android:textColor="@color/on_primary"
-                app:backgroundTint="@color/primary"
+                android:textColor="?attr/colorOnPrimary"
+                app:backgroundTint="?attr/colorPrimary"
                 app:cornerRadius="14dp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

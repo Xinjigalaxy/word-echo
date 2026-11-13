@@ -16,7 +16,9 @@ public final class AppPrefs {
     public static final int THEME_LIGHT = 1;
     public static final int THEME_DARK = 2;
 
-    public static final int DAILY_GOAL = 30;
+    public static final int DEFAULT_DAILY_GOAL = 30;
+    public static final int MIN_DAILY_GOAL = 10;
+    public static final int MAX_DAILY_GOAL = 200;
 
     private static final String FILE = "word_echo_settings";
     private static final String KEY_LEVEL = "level_filter";
@@ -31,6 +33,10 @@ public final class AppPrefs {
     private static final String KEY_DAILY_DATE = "daily_date";
     private static final String KEY_DAILY_COUNT = "daily_count";
     private static final String KEY_LAST_PLAYED = "last_played_key";
+    private static final String KEY_SPELL_WORD = "spell_word";
+    private static final String KEY_SCREEN_OFF = "screen_off_playback";
+    private static final String KEY_DAILY_GOAL = "daily_goal";
+    private static final String KEY_DYNAMIC_COLOR = "dynamic_color";
 
     private final SharedPreferences prefs;
 
@@ -87,11 +93,45 @@ public final class AppPrefs {
     }
 
     public int getRepeatCount() {
-        return Math.max(1, Math.min(3, prefs.getInt(KEY_REPEAT, 1)));
+        return Math.max(1, Math.min(2, prefs.getInt(KEY_REPEAT, 1)));
     }
 
     public void setRepeatCount(int value) {
-        prefs.edit().putInt(KEY_REPEAT, Math.max(1, Math.min(3, value))).apply();
+        prefs.edit().putInt(KEY_REPEAT, Math.max(1, Math.min(2, value))).apply();
+    }
+
+    public boolean isSpellWord() {
+        return prefs.getBoolean(KEY_SPELL_WORD, false);
+    }
+
+    public void setSpellWord(boolean value) {
+        prefs.edit().putBoolean(KEY_SPELL_WORD, value).apply();
+    }
+
+    public boolean isScreenOffPlayback() {
+        return prefs.getBoolean(KEY_SCREEN_OFF, false);
+    }
+
+    public void setScreenOffPlayback(boolean value) {
+        prefs.edit().putBoolean(KEY_SCREEN_OFF, value).apply();
+    }
+
+    public boolean isDynamicColor() {
+        return prefs.getBoolean(KEY_DYNAMIC_COLOR, false);
+    }
+
+    public void setDynamicColor(boolean value) {
+        prefs.edit().putBoolean(KEY_DYNAMIC_COLOR, value).apply();
+    }
+
+    public int getDailyGoal() {
+        return Math.max(MIN_DAILY_GOAL, Math.min(MAX_DAILY_GOAL,
+                prefs.getInt(KEY_DAILY_GOAL, DEFAULT_DAILY_GOAL)));
+    }
+
+    public void setDailyGoal(int value) {
+        prefs.edit().putInt(KEY_DAILY_GOAL,
+                Math.max(MIN_DAILY_GOAL, Math.min(MAX_DAILY_GOAL, value))).apply();
     }
 
     public int getThemeMode() {
@@ -144,8 +184,5 @@ public final class AppPrefs {
         }
         return prefs.getInt(KEY_DAILY_COUNT, 0);
     }
-
-    public int getDailyGoal() {
-        return DAILY_GOAL;
-    }
 }
+
