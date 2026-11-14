@@ -1,25 +1,25 @@
 # 词间回声 · Word Echo
 
-一个使用 **Material 3** 设计的离线英语听词 Android 应用。调用系统 TTS，随机朗读大学英语四级 / 六级词汇的英文单词，再朗读中文释义。
+使用 Material 3 实现的 Android 英语听词应用。调用系统 TTS 朗读 CET-4 / CET-6 英文单词及中文释义，词库内置，应用未申请网络权限。
 
-![词间回声](screenshots/01-listen.png)
+- 当前版本：1.1.1（versionCode 5）
+- 最低系统：Android 8.0（API 26）
+- 编译 / 目标 SDK：35
+- 开发语言：Java 17
+- 构建工具：Gradle 8.13 + AGP 8.13.2
 
 ## 功能
 
-- **系统 TTS 朗读**：先朗读英文单词，再切换到中文语音朗读释义；支持美音 / 英音、0.60×–1.40× 语速。
-- **朗读顺序可调**：单词可选 1 遍或 2 遍，释义始终只读 1 遍；可选字母拼读，例如 `a、p、p、l、e`。
-- **息屏朗读**：可在设置中开启，锁屏后继续播放，并通过常驻通知返回或停止。
-- **每日目标**：默认 30 个，可在设置中按 5 个步进修改（10–200）。
-- **动态取色**：Android 12+ 可跟随壁纸取色；Android 12 以下开关显示为不可用并回退默认主题色。
-- **随机听词**：每轮打乱顺序，全部听完后自动重新洗牌，避免只会听到开头几个词。
-- **自动连播**：读完自动切换下一个词，词间间隔可调（1–10 秒）。
-- **四 / 六级筛选**：四级、六级、全部三种词库视图；每个词条带有准确级别标记。
-- **收藏与复习**：星标收藏保存在本机，可从收藏页随机复习。
-- **词库搜索**：按英文拼写或中文释义搜索 6,661 个词条，点击查看完整释义。
-- **释义隐藏**：可先遮住中文释义，点按释义区域或眼睛按钮再显示，适合自测。
-- **深色模式**：跟随系统、浅色、深色三档，Material 3 动态排版与配色。
-- **三键导航适配**：正确计算系统导航栏安全区，避免底部导航下方出现空白或重叠。
-- **完全离线**：词库内置在 APK 中，不需要网络权限；仅使用设备已经安装的系统 TTS。
+- **词库**：6,661 个去重词条，其中 CET-4 4,543 个、CET-6 3,991 个，两库共有 1,873 个。
+- **随机听词**：每轮打乱顺序，全部播放后重新洗牌。
+- **系统 TTS**：先读英文，再读中文释义；支持美音 / 英音和 0.60×–1.40× 语速。
+- **朗读选项**：单词可读 1 或 2 遍，释义固定 1 遍；可选字母拼读，例如 `a, p, p, l, e`。
+- **自动连播**：词间间隔可调，范围 1–10 秒。
+- **息屏朗读**：可选开启；开启后通过前台服务和常驻通知在锁屏后继续播放。
+- **收藏与搜索**：支持星标收藏、随机复习，以及按英文或中文释义搜索。
+- **每日目标**：默认 30 个，可在 10–200 之间按 5 个步进调整。
+- **外观**：跟随系统 / 浅色 / 深色；Android 12+ 可选动态取色，Android 12 以下使用默认主题色。
+- **导航适配**：适配三键导航和手势导航的安全区。
 
 ## 截图
 
@@ -27,21 +27,46 @@
 | --- | --- |
 | ![听词](screenshots/01-listen.png) | ![词库](screenshots/03-browse.png) |
 
-| 单词详情 | 深色模式 |
-| --- | --- |
-| ![详情](screenshots/04-detail.png) | ![深色](screenshots/05-dark.png) |
-
-| 设置与朗读选项 | 动态取色 |
+| 设置 | 动态取色 |
 | --- | --- |
 | ![设置](screenshots/07-settings.png) | ![动态取色](screenshots/08-dynamic.png) |
 
-设置页会显示当前实际绑定的系统 TTS 引擎：
+## 安装
 
-![TTS 引擎](screenshots/06-engine.png)
+从 [Releases](https://github.com/Xinjigalaxy/word-echo/releases/latest) 下载 APK：
 
-## 词库
+```bash
+adb install -r WordEcho-v1.1.1.apk
+```
 
-应用启动时读取 `app/src/main/assets/words.tsv`，格式为：
+Release 中的 APK 使用 Android debug key 签名，仅用于安装测试。正式分发请使用自己的签名密钥。
+
+## 构建
+
+环境要求：
+
+- JDK 17
+- Android SDK Platform 35、Build-Tools 35.x
+- Gradle 8.13（仓库自带 Wrapper）
+
+```bash
+export ANDROID_HOME=/path/to/Android/Sdk
+./gradlew :app:assembleDebug
+```
+
+也可在 `local.properties` 中配置：
+
+```properties
+sdk.dir=/path/to/Android/Sdk
+```
+
+输出路径：`app/build/outputs/apk/debug/app-debug.apk`。
+
+仓库不包含签名密钥。本地 debug 构建由 Gradle 使用默认调试签名；release 构建需自行配置签名。
+
+## 词库格式
+
+运行时读取 `app/src/main/assets/words.tsv`：
 
 ```text
 级别掩码<TAB>单词<TAB>中文释义
@@ -49,80 +74,42 @@
 
 级别掩码：`1` = CET-4，`2` = CET-6，`3` = 两者共有。
 
-当前内置 **6,661 个去重词条**：
-
-- CET-4：4,543 个
-- CET-6：3,991 个
-- 两库共有：1,873 个
-
-原始词表来自 [KyleBing/english-vocabulary](https://github.com/KyleBing/english-vocabulary)，按 **BSD 3-Clause License** 使用。词表经过去重、合并与级别标记，完整许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-
-## 构建
-
-要求：
-
-- JDK 17
-- Android SDK Platform 35、Build-Tools 35.x
-- Gradle 8.13（项目自带 Wrapper，也可使用本机 Gradle）
-
-```bash
-export ANDROID_HOME=/path/to/Android/Sdk
-# 或编辑 local.properties:
-# sdk.dir=/path/to/Android/Sdk
-
-./gradlew :app:assembleDebug
-```
-
-APK 输出：`app/build/outputs/apk/debug/app-debug.apk`。
-
-已发布版本可从 [GitHub Releases](https://github.com/Xinjigalaxy/word-echo/releases/latest) 下载：
-
-```bash
-adb install -r WordEcho-v1.0.0.apk
-```
-
-> 仓库不包含任何签名密钥。Android Studio / Gradle 会为本地 debug 构建自动生成调试签名；正式发布请使用自己的发布密钥。
-
-## 使用说明
-
-1. 首次打开应用，等待状态栏下方出现「系统语音已就绪」。
-2. 选择「四级」「六级」或「全部」，点中央播放按钮开始。
-3. 打开「自动连播」后，应用会在词间间隔后自动切换单词。
-4. 点词卡右上角星标收藏；在「收藏」页可以随机复习。
-5. 如果听不到声音，请点击「系统语音设置」，确认系统 TTS 引擎和中文语音包已安装。
+原始词表来自 [KyleBing/english-vocabulary](https://github.com/KyleBing/english-vocabulary)，按 BSD 3-Clause License 使用。本项目对词表做了去重、合并和级别标记；完整声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 项目结构
 
 ```text
 app/src/main/
-├── assets/words.tsv                 # 内置四六级词库
+├── assets/words.tsv                  # 内置四六级词库
 ├── java/com/zs/wordecho/
-│   ├── MainActivity.java             # 播放调度、导航、收藏、设置协调
+│   ├── MainActivity.java             # 播放调度、导航、收藏与设置协调
 │   ├── data/                         # 词条、词库、偏好、收藏
-│   ├── speech/SpeechController.java # 系统 TTS 封装（英文 → 中文）
-│   └── ui/                           # Material 3 页面、底部弹层、波形
-└── res/                              # Material 3 主题、布局、图标
+│   ├── speech/SpeechController.java  # 系统 TTS 封装
+│   ├── playback/                     # 息屏播放前台服务
+│   └── ui/                           # Material 3 页面、弹层、波形等
+└── res/                              # 主题、布局、图标
 ```
 
 ## 已知限制
 
-- 没有音标和例句：上游词表只提供单词与释义，应用不伪造发音数据。
-- 发音质量取决于系统 TTS 引擎与已安装语音包；不同设备音色可能不同。
-- 自动连播在应用退到后台时会暂停，保证不会在用户不知情时持续出声。
+- 上游词表不提供音标和例句，应用未自行补充。
+- 发音质量取决于系统 TTS 引擎和语音包；第三方引擎可能缺少中文语音。
+- 息屏播放需要 Android 13+ 通知权限；通知被禁用时，前台服务仍可运行，但通知不可见。
+- 动态取色仅在 Android 12 及以上可用。
+- 数据仅保存在本机，不支持云同步或导出。
 
 ## 更新日志
 
-- **v1.1.1**：动态取色扩展到主页面背景、单词卡、释义卡、分段控件、标签、导航栏和声波等全部主要视觉元素；关闭动态取色可恢复原主题。
-- **v1.1.0**：修复三键导航底部安全区；新增息屏朗读、每日目标修改、单词 1/2 遍 + 释义一遍、字母拼读、Android 12+ 动态取色。
-- **v1.0.2**：补全 Android 11+ 的 `TTS_SERVICE` 查询声明，使应用能识别并跟随第三方系统 TTS 引擎（如 ClonTTS）；应用回到前台时会检测系统默认引擎变化并重新初始化；设置页会显示当前实际引擎名称。
-- **v1.0.1**：修复旧版本保存的任意语速值在打开「发音与设置」时触发 Slider 校验崩溃；语速滑杆改为连续取值并做范围钳制。
-- **v1.0.0**：首个版本，支持四六级随机听词、自动连播、收藏、搜索与深色模式。
+- **1.1.1**：主页面主要视觉元素完整支持动态取色；关闭后恢复默认主题。
+- **1.1.0**：修复三键导航安全区；新增息屏朗读、每日目标、单词 1/2 遍、字母拼读、动态取色。
+- **1.0.2**：支持发现并跟随第三方系统 TTS 引擎，返回前台时检测默认引擎变化。
+- **1.0.1**：修复旧语速值导致设置页 Slider 崩溃。
+- **1.0.0**：首个版本。
 
 ## 许可
 
-应用代码可自由用于学习与二次开发。第三方词表使用 BSD 3-Clause License，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+本仓库代码未附加独立的 `LICENSE` 文件，默认保留所有权利。第三方词表使用 BSD 3-Clause License，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 仓库
 
-- GitHub: https://github.com/Xinjigalaxy/word-echo
-- 词库与代码均已做脱敏整理，不包含本机 SDK 路径、签名密钥或个人信息。
+https://github.com/Xinjigalaxy/word-echo
